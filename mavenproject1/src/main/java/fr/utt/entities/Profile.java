@@ -63,17 +63,17 @@ public class Profile {
         String scoreFile = "C:\\Users\\kevin\\Documents\\NetBeansProjects\\mavenproject1\\src\\main\\java\\fr\\utt\\dataset\\scores.csv";
         FileWriter writer = null;
         try {
-            writer = new FileWriter(csvFile);
+            writer = new FileWriter(scoreFile);
 
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         for (Scorer sc : scorers) {
-                    List<String> list = new ArrayList<>();
-            list.add(""+sc.getDangerosity());
-            list.add(""+sc.getAggressivity());
-            list.add(""+sc.getVisibilty());
+            List<String> list = new ArrayList<>();
+            list.add("" + sc.getDangerosity());
+            list.add("" + sc.getAggressivity());
+            list.add("" + sc.getVisibilty());
 
             CSVUtils.writeLine(writer, list);
 
@@ -95,16 +95,17 @@ public class Profile {
             int size = statuses.size();
             Paging page = new Paging(pageno, 30);
             statuses.addAll(twitter.getUserTimeline(user, page));
-            TimeUnit.SECONDS.sleep(5);
+            TimeUnit.SECONDS.sleep(1);
             User userb = twitter.showUser(user);
             nbFriends = userb.getFriendsCount() - usera.getFriendsCount();
             nbTweets = userb.getStatusesCount() - usera.getStatusesCount();
 
         } catch (TwitterException e) {
-
+            if (e.getStatusCode() == 404) {
+            }
             e.printStackTrace();
         } catch (InterruptedException ex) {
-            java.util.logging.Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
         }
 //        }
         System.out.println("Total: " + statuses.size());
@@ -135,9 +136,15 @@ public class Profile {
             };
 
         }
+
         userFeatures.setMaliciousEntity(maliciousUrl);
-        userFeatures.setNbhashtags(nbHashtag / statuses.size());
-        userFeatures.setNbmentionEntities(mention / statuses.size());
+        if (statuses.size() != 0) {
+            userFeatures.setNbhashtags(nbHashtag / statuses.size());
+            userFeatures.setNbmentionEntities(mention / statuses.size());
+        } else {
+            userFeatures.setNbhashtags(0);
+            userFeatures.setNbmentionEntities(0);
+        }
         Scorer scorer = new Scorer(userFeatures);
         scorer.setDangerosity(statuses.size());
         scorers.add(scorer);

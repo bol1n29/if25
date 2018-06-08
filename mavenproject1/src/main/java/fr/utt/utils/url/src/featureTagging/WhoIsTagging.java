@@ -1,4 +1,4 @@
-package featureTagging;
+package fr.utt.utils.url.src.featureTagging;
 
 public class WhoIsTagging {
 	
