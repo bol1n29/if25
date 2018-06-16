@@ -5,23 +5,38 @@
  */
 package fr.utt.ui.CubeUI;
 
+import fr.utt.core.Core;
+import fr.utt.entities.Scorer;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import org.math.plot.Plot3DPanel;
 
 /**
  *
- * @author Rahmans
+ * @author Kevin
  */
 public class Dashboard extends javax.swing.JFrame {
 
     static boolean maximized = true;
     int xMouse;
     int yMouse;
-    
+    private ConfigPanel configPanel = new ConfigPanel();
+    private VisualisationPanel visualisationPanel = new VisualisationPanel();
+    private List<Scorer> scorers;
+    private static Core c;
+    private Plot3DPanel plot = new Plot3DPanel();
+
     public Dashboard() {
         initComponents();
+        c = new Core(configPanel.getjOAuthConsKey(), configPanel.getoAuthConsSecret(), configPanel.getOAuthAToken(), configPanel.getjOAuthATokenSecret());
+        pnlBody.add(configPanel, "card5");
+        pnlBody.add(visualisationPanel, "card6");
     }
 
     /**
@@ -65,15 +80,12 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        pnlNews = new javax.swing.JPanel();
+        CollectPanel = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jButton1 = new javax.swing.JButton();
+        timer = new javax.swing.JSpinner();
+        jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cube UI");
@@ -94,11 +106,11 @@ public class Dashboard extends javax.swing.JFrame {
         });
 
         btnExit.setBackground(new java.awt.Color(255, 255, 255));
-        btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/Exit.png"))); // NOI18N
+        btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/Exit.png"))); // NOI18N
         btnExit.setContentAreaFilled(false);
         btnExit.setFocusable(false);
         btnExit.setOpaque(true);
-        btnExit.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/Exit (2).png"))); // NOI18N
+        btnExit.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/Exit (2).png"))); // NOI18N
         btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnExitMouseEntered(evt);
@@ -134,11 +146,11 @@ public class Dashboard extends javax.swing.JFrame {
         });
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 255));
-        btnMinimize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/Minimize.png"))); // NOI18N
+        btnMinimize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/Minimize.png"))); // NOI18N
         btnMinimize.setContentAreaFilled(false);
         btnMinimize.setFocusable(false);
         btnMinimize.setOpaque(true);
-        btnMinimize.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/Minimize (2).png"))); // NOI18N
+        btnMinimize.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/Minimize (2).png"))); // NOI18N
         btnMinimize.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnMinimizeMouseEntered(evt);
@@ -181,7 +193,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 20)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(44, 62, 80));
-        jLabel2.setText("CONAN DOYLE");
+        jLabel2.setText("BOl1n29");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(127, 140, 141));
@@ -194,11 +206,11 @@ public class Dashboard extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(127, 140, 141));
-        jLabel4.setText("871k followers");
+        jLabel4.setText("2 followers");
 
         btnTimeline.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 16)); // NOI18N
         btnTimeline.setForeground(new java.awt.Color(44, 62, 80));
-        btnTimeline.setText("DASHBOARD");
+        btnTimeline.setText("Tableau de bord");
         btnTimeline.setContentAreaFilled(false);
         btnTimeline.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnTimeline.setFocusable(false);
@@ -213,7 +225,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         btnNews.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 16)); // NOI18N
         btnNews.setForeground(new java.awt.Color(44, 62, 80));
-        btnNews.setText("NEWS");
+        btnNews.setText("Simulation");
         btnNews.setContentAreaFilled(false);
         btnNews.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnNews.setFocusable(false);
@@ -229,7 +241,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         btnTrending.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 16)); // NOI18N
         btnTrending.setForeground(new java.awt.Color(44, 62, 80));
-        btnTrending.setText("TRENDING");
+        btnTrending.setText("Configuration");
         btnTrending.setContentAreaFilled(false);
         btnTrending.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnTrending.setFocusable(false);
@@ -246,7 +258,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         btnQA.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 16)); // NOI18N
         btnQA.setForeground(new java.awt.Color(44, 62, 80));
-        btnQA.setText("Q&A");
+        btnQA.setText("Comment ça marche?");
         btnQA.setContentAreaFilled(false);
         btnQA.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnQA.setFocusable(false);
@@ -264,7 +276,6 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(127, 140, 141));
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel16.setText("You are login as Admin, ");
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(52, 152, 219));
@@ -278,40 +289,41 @@ public class Dashboard extends javax.swing.JFrame {
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMenuLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
                 .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlMenuLayout.createSequentialGroup()
-                        .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblTimeline, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnTimeline, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(60, 60, 60)
-                        .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblNews, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnNews, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(60, 60, 60)
-                        .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnTrending, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                            .addComponent(lblTrending, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(60, 60, 60)
-                        .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnQA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblQA, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(15, 15, 15))
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel16))
+                    .addComponent(jLabel4)
                     .addGroup(pnlMenuLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlMenuLayout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel16))
-                            .addComponent(jLabel4)
-                            .addGroup(pnlMenuLayout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel5)))
-                        .addGap(0, 0, 0)
-                        .addComponent(jLabel17)
-                        .addGap(18, 18, 18))))
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)))
+                .addGap(0, 0, 0)
+                .addComponent(jLabel17)
+                .addGap(18, 18, 18))
+            .addGroup(pnlMenuLayout.createSequentialGroup()
+                .addGap(128, 128, 128)
+                .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblTimeline, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnTimeline))
+                .addGap(60, 60, 60)
+                .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnNews, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                    .addComponent(lblNews, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(39, 39, 39)
+                .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnTrending, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblTrending, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(60, 60, 60)
+                .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(pnlMenuLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(lblQA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnQA, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlMenuLayout.setVerticalGroup(
             pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -331,16 +343,15 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel16)
                         .addComponent(jLabel17)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTimeline)
-                    .addComponent(btnNews, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblTimeline, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNews, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMenuLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlMenuLayout.createSequentialGroup()
+                        .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnTimeline)
+                            .addComponent(btnNews, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblTimeline, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNews, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMenuLayout.createSequentialGroup()
                         .addComponent(btnTrending, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
@@ -365,7 +376,7 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("View");
+        jLabel6.setText("Consulter les Jeux de données");
         jLabel6.setOpaque(true);
 
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -397,11 +408,16 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("Manage");
+        jLabel7.setText("Lancer une simulation");
         jLabel7.setOpaque(true);
 
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/note.png"))); // NOI18N
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/bar-chart.png"))); // NOI18N
+        jLabel12.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jLabel12KeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -429,7 +445,7 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("Personalization");
+        jLabel8.setText("Configuration");
         jLabel8.setOpaque(true);
 
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -454,86 +470,17 @@ public class Dashboard extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        jLabel9.setBackground(new java.awt.Color(149, 165, 166));
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Visitors");
-        jLabel9.setOpaque(true);
-
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/browser.png"))); // NOI18N
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        jLabel10.setBackground(new java.awt.Color(149, 165, 166));
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("Traffic");
-        jLabel10.setOpaque(true);
-
-        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/bar-chart.png"))); // NOI18N
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
         javax.swing.GroupLayout pnlTimelineLayout = new javax.swing.GroupLayout(pnlTimeline);
         pnlTimeline.setLayout(pnlTimelineLayout);
         pnlTimelineLayout.setHorizontalGroup(
             pnlTimelineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlTimelineLayout.createSequentialGroup()
                 .addGap(70, 70, 70)
-                .addGroup(pnlTimelineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50)
-                .addGroup(pnlTimelineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlTimelineLayout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         pnlTimelineLayout.setVerticalGroup(
@@ -544,45 +491,64 @@ public class Dashboard extends javax.swing.JFrame {
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50)
-                .addGroup(pnlTimelineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(350, Short.MAX_VALUE))
         );
 
         jspTimeline.setViewportView(pnlTimeline);
 
         pnlBody.add(jspTimeline, "card2");
 
-        pnlNews.setBackground(new java.awt.Color(245, 245, 245));
+        CollectPanel.setBackground(new java.awt.Color(245, 245, 245));
 
         jLabel18.setFont(new java.awt.Font("Berlin Sans FB Demi", 0, 16)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(44, 62, 80));
-        jLabel18.setText("NEWS");
+        jLabel18.setText("Simulation");
 
-        javax.swing.GroupLayout pnlNewsLayout = new javax.swing.GroupLayout(pnlNews);
-        pnlNews.setLayout(pnlNewsLayout);
-        pnlNewsLayout.setHorizontalGroup(
-            pnlNewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlNewsLayout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addGroup(pnlNewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel18)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(60, Short.MAX_VALUE))
+        jButton1.setText("Lancer la collecte");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText("Durée de la collecte (min)");
+
+        javax.swing.GroupLayout CollectPanelLayout = new javax.swing.GroupLayout(CollectPanel);
+        CollectPanel.setLayout(CollectPanelLayout);
+        CollectPanelLayout.setHorizontalGroup(
+            CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(CollectPanelLayout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(CollectPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(CollectPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(timer, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(164, 164, 164)))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
-        pnlNewsLayout.setVerticalGroup(
-            pnlNewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlNewsLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(298, Short.MAX_VALUE))
+        CollectPanelLayout.setVerticalGroup(
+            CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(CollectPanelLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(timer, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(373, Short.MAX_VALUE))
         );
 
-        pnlBody.add(pnlNews, "card4");
+        pnlBody.add(CollectPanel, "card4");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -599,19 +565,19 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(pnlBody, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
+                .addComponent(pnlBody, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE))
         );
 
-        setSize(new java.awt.Dimension(1000, 600));
+        setSize(new java.awt.Dimension(1027, 658));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseEntered
-        btnExit.setBackground(new Color(232,17,35));
+        btnExit.setBackground(new Color(232, 17, 35));
     }//GEN-LAST:event_btnExitMouseEntered
 
     private void btnExitMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseExited
-        btnExit.setBackground(new Color(255,255,255));
+        btnExit.setBackground(new Color(255, 255, 255));
     }//GEN-LAST:event_btnExitMouseExited
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
@@ -619,32 +585,32 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnMaximizeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMaximizeMouseEntered
-        btnMaximize.setBackground(new Color(229,229,229));
+        btnMaximize.setBackground(new Color(229, 229, 229));
     }//GEN-LAST:event_btnMaximizeMouseEntered
 
     private void btnMaximizeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMaximizeMouseExited
-        btnMaximize.setBackground(new Color(255,255,255));
+        btnMaximize.setBackground(new Color(255, 255, 255));
     }//GEN-LAST:event_btnMaximizeMouseExited
 
     private void btnMaximizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaximizeActionPerformed
-        if(maximized){
+        if (maximized) {
             //handle fullscreen - taskbar
             Dashboard.this.setExtendedState(JFrame.MAXIMIZED_BOTH);
             GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
             Dashboard.this.setMaximizedBounds(env.getMaximumWindowBounds());
             maximized = false;
-        }else{
+        } else {
             setExtendedState(JFrame.NORMAL);
             maximized = true;
         }
     }//GEN-LAST:event_btnMaximizeActionPerformed
 
     private void btnMinimizeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseEntered
-        btnMinimize.setBackground(new Color(229,229,229));
+        btnMinimize.setBackground(new Color(229, 229, 229));
     }//GEN-LAST:event_btnMinimizeMouseEntered
 
     private void btnMinimizeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizeMouseExited
-        btnMinimize.setBackground(new Color(255,255,255));
+        btnMinimize.setBackground(new Color(255, 255, 255));
     }//GEN-LAST:event_btnMinimizeMouseExited
 
     private void btnMinimizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinimizeActionPerformed
@@ -657,7 +623,7 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_pnlHeaderMousePressed
 
     private void pnlHeaderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMouseDragged
-        if(maximized){
+        if (maximized) {
             int x = evt.getXOnScreen();
             int y = evt.getYOnScreen();
             this.setLocation(x - xMouse, y - yMouse);
@@ -665,43 +631,50 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_pnlHeaderMouseDragged
 
     private void btnNewsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewsActionPerformed
-        lblNews.setBackground(new Color(0,204,106));
-        
-        lblTimeline.setBackground(new Color(255,255,255));
-        lblTrending.setBackground(new Color(255,255,255));
-        lblQA.setBackground(new Color(255,255,255));
-        
+        lblNews.setBackground(new Color(0, 204, 106));
+
+        lblTimeline.setBackground(new Color(255, 255, 255));
+        lblTrending.setBackground(new Color(255, 255, 255));
+        lblQA.setBackground(new Color(255, 255, 255));
+
         pnlBody.removeAll();
         pnlBody.repaint();
         pnlBody.revalidate();
-        pnlBody.add(pnlNews);
+        pnlBody.add(visualisationPanel);
         pnlBody.repaint();
         pnlBody.revalidate();
+
     }//GEN-LAST:event_btnNewsActionPerformed
 
     private void btnTrendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrendingActionPerformed
-        lblTrending.setBackground(new Color(0,204,106));
-        
-        lblTimeline.setBackground(new Color(255,255,255));
-        lblNews.setBackground(new Color(255,255,255));
-        lblQA.setBackground(new Color(255,255,255));
+        lblTrending.setBackground(new Color(0, 204, 106));
+
+        lblTimeline.setBackground(new Color(255, 255, 255));
+        lblNews.setBackground(new Color(255, 255, 255));
+        lblQA.setBackground(new Color(255, 255, 255));
+        pnlBody.removeAll();
+        pnlBody.repaint();
+        pnlBody.revalidate();
+        pnlBody.add(configPanel);
+        pnlBody.repaint();
+        pnlBody.revalidate();
     }//GEN-LAST:event_btnTrendingActionPerformed
 
     private void btnQAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQAActionPerformed
-        lblQA.setBackground(new Color(0,204,106));
-        
-        lblTimeline.setBackground(new Color(255,255,255));
-        lblNews.setBackground(new Color(255,255,255));
-        lblTrending.setBackground(new Color(255,255,255));
+        lblQA.setBackground(new Color(0, 204, 106));
+
+        lblTimeline.setBackground(new Color(255, 255, 255));
+        lblNews.setBackground(new Color(255, 255, 255));
+        lblTrending.setBackground(new Color(255, 255, 255));
     }//GEN-LAST:event_btnQAActionPerformed
 
     private void btnTimelineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimelineActionPerformed
-        lblTimeline.setBackground(new Color(0,204,106));
-        
-        lblQA.setBackground(new Color(255,255,255));
-        lblNews.setBackground(new Color(255,255,255));
-        lblTrending.setBackground(new Color(255,255,255));
-        
+        lblTimeline.setBackground(new Color(0, 204, 106));
+
+        lblQA.setBackground(new Color(255, 255, 255));
+        lblNews.setBackground(new Color(255, 255, 255));
+        lblTrending.setBackground(new Color(255, 255, 255));
+
         pnlBody.removeAll();
         pnlBody.repaint();
         pnlBody.revalidate();
@@ -709,6 +682,14 @@ public class Dashboard extends javax.swing.JFrame {
         pnlBody.repaint();
         pnlBody.revalidate();
     }//GEN-LAST:event_btnTimelineActionPerformed
+
+    private void jLabel12KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLabel12KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel12KeyPressed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -746,7 +727,12 @@ public class Dashboard extends javax.swing.JFrame {
         });
     }
 
+    public static Core getCore() {
+        return c;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel CollectPanel;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMaximize;
     private javax.swing.JButton btnMinimize;
@@ -754,13 +740,11 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnQA;
     private javax.swing.JButton btnTimeline;
     private javax.swing.JButton btnTrending;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -775,8 +759,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JScrollPane jspTimeline;
     private javax.swing.JLabel lblNews;
@@ -786,7 +768,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel pnlBody;
     private javax.swing.JPanel pnlHeader;
     private javax.swing.JPanel pnlMenu;
-    private javax.swing.JPanel pnlNews;
     private javax.swing.JPanel pnlTimeline;
+    private javax.swing.JSpinner timer;
     // End of variables declaration//GEN-END:variables
 }

@@ -16,6 +16,11 @@
             <artifactId>twitter4j-core</artifactId>
             <version>[4.0,)</version>
         </dependency>
+            <dependency>
+      <groupId>com.github.yannrichet</groupId>
+      <artifactId>JMathPlot</artifactId>
+      <version>1.0.1</version>
+    </dependency>
         <dependency>
             <groupId>org.xbill</groupId>
             <artifactId>DNS</artifactId>
@@ -48,6 +53,22 @@
             <artifactId>log4j</artifactId>
             <version>1.2.14</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jzy3d</groupId>
+            <artifactId>jzy3d-api</artifactId>
+            <version>1.0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout</artifactId>
+            <version>3.7.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>3.7</version>
         </dependency>
     </dependencies>
     <name>spot</name>
