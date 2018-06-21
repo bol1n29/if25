@@ -41,7 +41,8 @@ public class Scorer {
     }
 
     public void setDangerosity(double totaloftweets) {
-        this.dangerosity=(this.uf .getMaliciousEntity()+this.uf .getNbfriends())/totaloftweets;
+        this.dangerosity=(this.uf .getMaliciousEntity())/totaloftweets;
+//        this.dangerosity=(this.uf .getMaliciousEntity()+this.uf .getNbfriends())/totaloftweets;
     }
     
     

@@ -9,13 +9,19 @@ import fr.utt.dataset.utils.CSVUtils;
 import fr.utt.entities.Scorer;
 import fr.utt.entities.UserFeatures;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -108,8 +114,25 @@ public class Core {
 
         }
         System.out.println("\nFinished all threads");
-        String scoreFile = "C:\\Users\\kevin\\Documents\\NetBeansProjects\\mavenproject1\\src\\main\\java\\fr\\utt\\dataset\\scores.csv";
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        Date date = new Date();
+//	System.out.println(dateFormat.format(date));
+        LocalDateTime now = LocalDateTime.now();
+        String a = "" + dtf.format(now);
+        String scoreFile = "C:\\Users\\kevin\\Documents\\NetBeansProjects\\mavenproject1\\src\\main\\java\\fr\\utt\\dataset\\scores" + a.replaceAll(":", "-")
+                + ".csv";
+        System.out.println("" + scoreFile);
+
         FileWriter writer = null;
+        File file = new File(scoreFile);
+
+//Create the file
+        if (file.createNewFile()) {
+            System.out.println("File is created!");
+        } else {
+            System.out.println("File already exists.");
+        }
+
         try {
             writer = new FileWriter(scoreFile);
 
@@ -132,8 +155,9 @@ public class Core {
             CSVUtils.writeLine(writer, list);
 
 //            System.out.println(sc.getDangerosity() + "-" + sc.getAggressivity() + "-" + sc.getVisibilty());
-
         }
+        writer.flush();
+        writer.close();
 //        // create your PlotPanel (you can use it as a JPanel)
 //        Plot3DPanel plot = new Plot3DPanel();
 //

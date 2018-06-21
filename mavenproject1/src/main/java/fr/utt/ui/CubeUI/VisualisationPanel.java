@@ -5,14 +5,18 @@
  */
 package fr.utt.ui.CubeUI;
 
-import fr.utt.core.Core;
 import fr.utt.entities.Scorer;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 import org.math.plot.Plot3DPanel;
 
 /**
@@ -26,9 +30,17 @@ public class VisualisationPanel extends javax.swing.JPanel {
      */
     private List<Scorer> scorers;
     private Plot3DPanel plot = new Plot3DPanel();
+    static int plot_Nb = 1;
 
     public VisualisationPanel() {
         initComponents();
+        BasicInternalFrameUI bi = (BasicInternalFrameUI) frame.getUI();
+        plot.setAxisLabel(0, "Dangerosité");
+        plot.setAxisLabel(1, "Agressivité");
+        plot.setAxisLabel(2, "Visibilité");;
+        frame.setBorder(null);
+        frame.setContentPane(plot);
+        bi.setNorthPane(null);
 
     }
 
@@ -49,6 +61,7 @@ public class VisualisationPanel extends javax.swing.JPanel {
         jLabel9 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         frame = new javax.swing.JInternalFrame();
+        jButton3 = new javax.swing.JButton();
 
         CollectPanel.setBackground(new java.awt.Color(245, 245, 245));
 
@@ -65,88 +78,98 @@ public class VisualisationPanel extends javax.swing.JPanel {
 
         jLabel9.setText("Durée de la collecte (min)");
 
-        jButton2.setText("Annuler");
+        jButton2.setText("Charger");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         frame.setBorder(null);
         frame.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setFrameIcon(null);
         frame.setMaximumSize(new java.awt.Dimension(400, 400));
         frame.setMinimumSize(new java.awt.Dimension(400, 400));
+        frame.setPreferredSize(new java.awt.Dimension(550, 443));
         frame.setVisible(true);
 
         javax.swing.GroupLayout frameLayout = new javax.swing.GroupLayout(frame.getContentPane());
         frame.getContentPane().setLayout(frameLayout);
         frameLayout.setHorizontalGroup(
             frameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 550, Short.MAX_VALUE)
         );
         frameLayout.setVerticalGroup(
             frameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 669, Short.MAX_VALUE)
+            .addGap(0, 416, Short.MAX_VALUE)
         );
+
+        jButton3.setText("Annuler");
 
         javax.swing.GroupLayout CollectPanelLayout = new javax.swing.GroupLayout(CollectPanel);
         CollectPanel.setLayout(CollectPanelLayout);
         CollectPanelLayout.setHorizontalGroup(
             CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(CollectPanelLayout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(57, 57, 57)
+                .addComponent(jLabel18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(CollectPanelLayout.createSequentialGroup()
+                .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(CollectPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel18)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(CollectPanelLayout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(timer, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CollectPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(frame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(70, 70, 70))
+                        .addComponent(timer, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(CollectPanelLayout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(frame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42))
         );
         CollectPanelLayout.setVerticalGroup(
             CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(CollectPanelLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(timer, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addComponent(frame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(CollectPanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(timer, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(CollectPanelLayout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(frame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1031, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(CollectPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(CollectPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 863, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(CollectPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(3, 3, 3)
+                .addComponent(CollectPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -163,7 +186,7 @@ public class VisualisationPanel extends javax.swing.JPanel {
                 y[i] = sc.getAggressivity();
                 z[i] = sc.getVisibilty();
                 i++;
-                System.out.println(sc.getDangerosity() + "-" + sc.getAggressivity() + "-" + sc.getVisibilty());
+//                System.out.println(sc.getDangerosity() + "-" + sc.getAggressivity() + "-" + sc.getVisibilty());
 
             }
             // create your PlotPanel (you can use it as a JPanel)
@@ -172,10 +195,7 @@ public class VisualisationPanel extends javax.swing.JPanel {
             plot.addLegend("SOUTH");
 
             // add a line plot to the PlotPanel
-            plot.addScatterPlot("my plot", x, y, z);
-            plot.setAxisLabel(0, "Dangerosité");
-            plot.setAxisLabel(1, "Agressivité");
-            plot.setAxisLabel(2, "Visibilité");
+            plot.addScatterPlot("Actual Score", x, y, z);
             JFrame frame1 = new JFrame("a plot panel");
             frame1.setSize(600, 600);
             frame.setBorder(null);
@@ -191,15 +211,77 @@ public class VisualisationPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
- 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        showOpenFileDialog();
+    }//GEN-LAST:event_jButton2ActionPerformed
+    private void showOpenFileDialog() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setAcceptAllFileFilterUsed(true);
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            String csvFile = selectedFile.getAbsolutePath();
+            String line = "";
+            String cvsSplitBy = ",";
+            String[] users = null;
+            int i = 0;
 
-   
+            try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+
+                while ((line = br.readLine()) != null) {
+
+                    // use comma as separator
+                    users = line.split(cvsSplitBy);
+
+                    i++;
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+                int j = 0;
+
+                double[] x = new double[i + 1];
+                double[] y = new double[i + 1];
+                double[] z = new double[i + 1];
+
+                while ((line = br.readLine()) != null) {
+
+                    // use comma as separator
+                    users = line.split(cvsSplitBy);
+                    x[j] = Double.parseDouble(users[0]);
+                    y[j] = Double.parseDouble(users[1]);
+                    z[j] = Double.parseDouble(users[2]);
+                    j++;
+                    System.out.println("" + x[j] + "" + y[j] + "" + z[j]);
+                }
+
+                // create your PlotPanel (you can use it as a JPanel)
+                // define the legend position
+                plot.addLegend("SOUTH");
+
+                // add a line plot to the PlotPanel
+                plot.addScatterPlot("Score " + plot_Nb, x, y, z);
+
+                plot_Nb++;
+                frame.setContentPane(plot);
+                System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CollectPanel;
     private javax.swing.JInternalFrame frame;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
