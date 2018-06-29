@@ -90,7 +90,9 @@ public class Core {
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
         Twitter twitter = new TwitterFactory().getInstance(twitterStream.getAuthorization());
 
-        String csvFile = "C:\\Users\\kevin\\Documents\\NetBeansProjects\\mavenproject1\\src\\main\\java\\fr\\utt\\dataset\\users_analysed.csv";
+        String filePath = new File("").getAbsolutePath();
+        String csvFile = filePath+"\\src\\main\\java\\fr\\utt\\dataset\\users_analysed.csv";
+//        String csvFile = "C:\\Users\\kevin\\Documents\\NetBeansProjects\\mavenproject1\\src\\main\\java\\fr\\utt\\dataset\\users_analysed.csv";
         String line = "";
         String cvsSplitBy = ",";
         String[] users = null;

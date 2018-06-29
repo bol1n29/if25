@@ -31,9 +31,12 @@ public class VisualisationPanel extends javax.swing.JPanel {
     private List<Scorer> scorers;
     private Plot3DPanel plot = new Plot3DPanel();
     static int plot_Nb = 1;
+    Thread t;
 
     public VisualisationPanel() {
         initComponents();
+                jButton3.setEnabled(false);
+
         BasicInternalFrameUI bi = (BasicInternalFrameUI) frame.getUI();
         plot.setAxisLabel(0, "Dangerosité");
         plot.setAxisLabel(1, "Agressivité");
@@ -101,10 +104,15 @@ public class VisualisationPanel extends javax.swing.JPanel {
         );
         frameLayout.setVerticalGroup(
             frameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 417, Short.MAX_VALUE)
         );
 
         jButton3.setText("Annuler");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout CollectPanelLayout = new javax.swing.GroupLayout(CollectPanel);
         CollectPanel.setLayout(CollectPanelLayout);
@@ -117,18 +125,19 @@ public class VisualisationPanel extends javax.swing.JPanel {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(CollectPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(CollectPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(timer, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(CollectPanelLayout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(CollectPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 5, Short.MAX_VALUE)
+                        .addComponent(timer, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(frame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(42, 42, 42))
@@ -141,19 +150,18 @@ public class VisualisationPanel extends javax.swing.JPanel {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(CollectPanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
+                        .addGap(121, 121, 121)
                         .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(timer, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(45, 45, 45)
+                        .addGroup(CollectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(CollectPanelLayout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(frame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(frame, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -174,47 +182,61 @@ public class VisualisationPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            jButton1.setEnabled(false);
-            this.scorers = Dashboard.getCore().Collect((int) timer.getValue());
-            int i = 0;
-            double[] x = new double[scorers.size()];
-            double[] y = new double[scorers.size()];
-            double[] z = new double[scorers.size()];
-            for (Scorer sc : scorers) {
-                x[i] = sc.getDangerosity();
-                y[i] = sc.getAggressivity();
-                z[i] = sc.getVisibilty();
-                i++;
+        int timeH = (int) timer.getValue();
+        t = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    jButton1.setEnabled(false);
+                    jButton3.setEnabled(true);
+                    scorers = Dashboard.getCore().Collect(timeH);
+                    int i = 0;
+                    double[] x = new double[scorers.size()];
+                    double[] y = new double[scorers.size()];
+                    double[] z = new double[scorers.size()];
+                    for (Scorer sc : scorers) {
+                        x[i] = sc.getDangerosity();
+                        y[i] = sc.getAggressivity();
+                        z[i] = sc.getVisibilty();
+                        i++;
 //                System.out.println(sc.getDangerosity() + "-" + sc.getAggressivity() + "-" + sc.getVisibilty());
 
+                    }
+                    // create your PlotPanel (you can use it as a JPanel)
+
+                    // define the legend position
+                    plot.addLegend("SOUTH");
+
+                    // add a line plot to the PlotPanel
+                    plot.addScatterPlot("Actual Score", x, y, z);
+                    JFrame frame1 = new JFrame("a plot panel");
+                    frame1.setSize(600, 600);
+                    frame.setBorder(null);
+                    frame.setContentPane(plot);
+                    //        frame1.setVisible(true);
+                    jButton1.setEnabled(true);
+
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(VisualisationPanel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(VisualisationPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            // create your PlotPanel (you can use it as a JPanel)
-
-            // define the legend position
-            plot.addLegend("SOUTH");
-
-            // add a line plot to the PlotPanel
-            plot.addScatterPlot("Actual Score", x, y, z);
-            JFrame frame1 = new JFrame("a plot panel");
-            frame1.setSize(600, 600);
-            frame.setBorder(null);
-            frame.setContentPane(plot);
-            //        frame1.setVisible(true);
-            jButton1.setEnabled(true);
-
-            // TODO add your handling code here:
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        });
+        t.start();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         showOpenFileDialog();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        t.stop();
+        jButton1.setEnabled(true);
+        jButton3.setEnabled(false);
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
     private void showOpenFileDialog() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
