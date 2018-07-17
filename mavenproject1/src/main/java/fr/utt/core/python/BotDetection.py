@@ -1,6 +1,5 @@
 """
 #Python 3
-@authors: JubinSoni(jas1464), BalajiReddy(bbr234), TusharAhuja(ta1301)
 #Dependencies: Pandas, Numpy, Seaborn, MatplotLib, Sklearn
 #Project: ML Twitter Bot Detection
 """
